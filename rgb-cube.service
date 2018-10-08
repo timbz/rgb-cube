@@ -1,0 +1,14 @@
+[Unit]
+Description=RGB Cube
+Before=basic.target
+After=local-fs.target sysinit.target
+DefaultDependencies=no
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python /home/pi/rgb_cube/main.py
+User=pi
+Group=pi
+
+[Install]
+WantedBy=sysinit.target

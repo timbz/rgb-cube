@@ -1,0 +1,10 @@
+[Unit]
+Description=RGB Cube Signal
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStop=/bin/systemctl kill -s SIGHUP rgb-cube
+
+[Install]
+WantedBy=multi-user.target
