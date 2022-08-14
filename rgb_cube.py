@@ -95,7 +95,7 @@ class RgbCube:
         self.serial.close()
 
     def debug_print(self):
-        print hexlify(self.data)
+        print(hexlify(self.data))
 
     def fill(self, r, g, b):
         for i in range(len(self.data)):
@@ -119,6 +119,6 @@ class RgbCube:
 
     def update(self):
         """Sends the cube data and returns the estimated transfer time"""
-        encoded = cobs.encode(str(self.data))
-        self.serial.write(encoded + '\x00')
+        encoded = cobs.encode(self.data)
+        self.serial.write(encoded + b'\x00')
         return len(encoded) * 8.0 / self.baudrate + 0.001 # 1ms extra

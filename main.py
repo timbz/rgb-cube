@@ -41,30 +41,30 @@ def debug_print(data):
     out = datetime.now().strftime("%H:%M:%S.%f") + ':'
     for v in data:
         out = out + str(v) + ','
-    print out
+    print(out)
 
 
 def boot(cube):
     x = 0
     g = 3
     while g < 10:
-        cube.fill('\x00', chr(g), '\x00')
+        cube.fill(0, g, 0)
         cube.update()
         sleep(0.05)
         g = g + 3
     while not is_booted():
         y = (cos(x + pi) + 1.) / 2.
         g = 10 + int(y*50.)
-        cube.fill('\x00', chr(g), '\x00')
+        cube.fill(0, g, 0)
         cube.update()
         sleep(0.05)
         x = x + 0.1
     while g > 0:
-        cube.fill('\x00', chr(g), '\x00')
+        cube.fill(0, g, 0)
         cube.update()
         sleep(0.05)
         g = g - 3
-    cube.fill('\x00', '\x00', '\x00')
+    cube.fill(0, 0, 0)
     cube.update()
 
 
@@ -72,7 +72,7 @@ def finalize(cube):
     x = 0
     r = 3
     while r < 10:
-        cube.fill(chr(r), '\x00', '\x00')
+        cube.fill(r, 0, 0)
         cube.update()
         sleep(0.05)
         r = r + 3
@@ -80,16 +80,16 @@ def finalize(cube):
     while not terminate:
         y = (cos(x + pi) + 1.) / 2.
         r = 10 + int(y*50.)
-        cube.fill(chr(r), '\x00', '\x00')
+        cube.fill(r, 0, 0)
         cube.update()
         sleep(0.05)
         x = x + 0.1
     while r > 0:
-        cube.fill(chr(r), '\x00', '\x00')
+        cube.fill(r, 0, 0)
         cube.update()
         sleep(0.05)
         r = r - 3
-    cube.fill('\x00', '\x00', '\x00')
+    cube.fill(0, 0, 0)
     cube.update()
     sleep(0.05)
 
@@ -102,18 +102,18 @@ def run (cube):
 
     global terminate
     while not terminate:
-        data = [ord(x) for x in cava_process.stdout.read(8)]
+        data = cava_process.stdout.read(8)
         #debug_print(data)
 
         if len(data) != 8:
             break
-        
+
         if data == data_fifo[0] and data == data_fifo[1] and data == data_fifo[2] and data == data_fifo[3]:
             continue
 
         i_mod = sum(data) / float(len(data)) / 255.
         data_fifo.appendleft(data)
-        
+
         for x in range(4):
             f_data = data_fifo[x]
             for y in range(4):
@@ -122,7 +122,7 @@ def run (cube):
                 for z in range(4):
                     val = l_val * ((3-z)/3.) + r_val * (z/3.)
                     (r, g, b) = val_to_rgb(val, i_mod)
-                    cube.set(x, y, z, chr(r), chr(g), chr(b))
+                    cube.set(x, y, z, r, g, b)
 
         cube.update()
 
